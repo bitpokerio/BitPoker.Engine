@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace holdem_engine
+namespace BitPoker.Engine
 {
     /// <summary>
     /// A list which acts like the List class, but with more of a Java

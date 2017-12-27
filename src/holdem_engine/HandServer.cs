@@ -57,6 +57,7 @@ namespace holdem_engine
                 blinds.Add((double)savedHand.Context.BigBlind);
             double ante = (double)savedHand.Context.Ante;
             BettingStructure bs = BettingStructure.None;
+            
             switch (savedHand.Context.BettingType)
 	        {
 		        case BettingType.FixedLimit: bs = BettingStructure.Limit; break;

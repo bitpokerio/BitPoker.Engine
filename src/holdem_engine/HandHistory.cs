@@ -13,7 +13,6 @@ namespace holdem_engine
     /// </summary>
     public class HandHistory : IComparable<HandHistory>
     {
-
         #region Member Variables
         private ulong handNumber;
         private uint button;
@@ -117,6 +116,7 @@ namespace holdem_engine
             get { return preflopActions; }
             set { preflopActions = value; }
         }
+        
         public List<Action> FlopActions
         {
             get { return flopActions; }
@@ -200,7 +200,6 @@ namespace holdem_engine
             get { return bigBlind; }
             set { bigBlind = value; }
         }
-	
 
         public double SmallBlind
         {
@@ -214,12 +213,12 @@ namespace holdem_engine
             set { button = value; }
         }
                    
-
         public ulong HandNumber
         {
             get { return handNumber; }
             set { handNumber = value; }
         }
+        
         public bool[] Folded { get; set; }
         public bool[] AllIn { get; set; }
         public bool ShowDown { get; set; }
@@ -453,93 +452,95 @@ namespace holdem_engine
 		{
             StringBuilder result = new StringBuilder();
             
-                result.Append(string.Format("{0} Game #{1}:  Hold'em ", site, handNumber));
-                #region Betting Structure
-                switch (bs)
-                {
-                    case BettingStructure.Limit: result.Append("Limit ");
-                        break;
-                    case BettingStructure.PotLimit: result.Append("Pot Limit ");
-                        break;
-                    case BettingStructure.NoLimit: result.Append("No Limit ");
-                        break;
-                    default: throw new Exception("Unknown betting structure ");
-                }
-                #endregion
+            result.Append(string.Format("{0} Game #{1}:  Hold'em ", site, handNumber));
+            #region Betting Structure
+            switch (bs)
+            {
+                case BettingStructure.Limit: result.Append("Limit ");
+                    break;
+                case BettingStructure.PotLimit: result.Append("Pot Limit ");
+                    break;
+                case BettingStructure.NoLimit: result.Append("No Limit ");
+                    break;
+                default: throw new Exception("Unknown betting structure ");
+            }
+            #endregion
 
-                result.AppendLine("Seat #" + Button + " is the button");
+            result.AppendLine("Seat #" + Button + " is the button");
 
-                for (int i = 0; i < Players.Length; i++)
-                {
-                    result.AppendLine(string.Format("Seat {0}: {1} ({2} in chips)", Players[i].SeatNumber,
-                                                                          Players[i].Name, StartingChips[i]));
+            for (int i = 0; i < Players.Length; i++)
+            {
+                result.AppendLine(string.Format("Seat {0}: {1} ({2} in chips)", Players[i].SeatNumber,
+                                                                      Players[i].Name, StartingChips[i]));
 
-                }
+            }
 
-                foreach (Action action in PredealActions)
+            foreach (Action action in PredealActions)
+                result.AppendLine(action.ToString());
+
+            result.AppendLine("*** HOLE CARDS ***");
+
+            for (int i = 0; i < Players.Length; i++)
+                if (HoleCards[i] != 0UL)
+					if (showAllHolecards || i == this.Hero)
+                    	result.AppendLine(string.Format("Dealt to {0} [{1}]", Players[i].Name,
+                                                    HoldemHand.Hand.MaskToString(HoleCards[i])));
+
+            foreach (Action action in PreflopActions)
+                result.AppendLine(action.ToString());
+
+            #region Print post-flop actions and board cards.
+            if (Flop != 0UL)
+            {
+                result.AppendLine("*** Flop *** [" + HoldemHand.Hand.MaskToString(Flop) + "]");
+
+                foreach (Action action in FlopActions)
                     result.AppendLine(action.ToString());
+            }
+            
+            if (Turn != 0UL)
+            {
+                result.AppendLine("*** Turn *** [" + HoldemHand.Hand.MaskToString(Flop) + "] ["
+                                                   + HoldemHand.Hand.MaskToString(Turn) + "]");
 
-                result.AppendLine("*** HOLE CARDS ***");
-
-                for (int i = 0; i < Players.Length; i++)
-                    if (HoleCards[i] != 0UL)
-						if (showAllHolecards || i == this.Hero)
-                        	result.AppendLine(string.Format("Dealt to {0} [{1}]", Players[i].Name,
-                                                        HoldemHand.Hand.MaskToString(HoleCards[i])));
-
-                foreach (Action action in PreflopActions)
+                foreach (Action action in TurnActions)
                     result.AppendLine(action.ToString());
+            }
+                
+            if (River != 0UL)
+            {
+                result.AppendLine("*** River *** ["
+                                      + HoldemHand.Hand.MaskToString(Flop)
+                                      + " " + HoldemHand.Hand.MaskToString(Turn)
+                                      + "] ["
+                                      + HoldemHand.Hand.MaskToString(River) + "]");
 
-                #region Print post-flop actions and board cards.
-                if (Flop != 0UL)
+                foreach (Action action in RiverActions)
+                    result.AppendLine(action.ToString());
+            }
+            #endregion
+
+            if (ShowDown)
+            {
+                result.AppendLine("*** Show Down ***");
+                for (int i = 0; i < players.Length; i++)
+                    if (!Folded[i])
+					result.AppendLine(string.Format("{0} shows [{1}], {2}", Players[i].Name,
+					        HoldemHand.Hand.MaskToString(HoleCards[i]),
+                            HoldemHand.Hand.DescriptionFromMask(Flop | Turn | River | hc[i]).ToLower()));
+            }
+
+            if (Winners != null)
+            {
+                result.AppendLine("*** Summary ***");
+                foreach (Winner winner in Winners)
                 {
-                    result.AppendLine("*** Flop *** [" + HoldemHand.Hand.MaskToString(Flop) + "]");
-
-                    foreach (Action action in FlopActions)
-                        result.AppendLine(action.ToString());
+                    result.AppendFormat("{0} collected {1} from {2}", winner.Player, winner.Amount, winner.Pot);
+                    result.AppendLine();
                 }
-                if (Turn != 0UL)
-                {
-                    result.AppendLine("*** Turn *** [" + HoldemHand.Hand.MaskToString(Flop) + "] ["
-                                                       + HoldemHand.Hand.MaskToString(Turn) + "]");
-
-                    foreach (Action action in TurnActions)
-                        result.AppendLine(action.ToString());
-                }
-                if (River != 0UL)
-                {
-                    result.AppendLine("*** River *** ["
-                                          + HoldemHand.Hand.MaskToString(Flop)
-                                          + " " + HoldemHand.Hand.MaskToString(Turn)
-                                          + "] ["
-                                          + HoldemHand.Hand.MaskToString(River) + "]");
-
-                    foreach (Action action in RiverActions)
-                        result.AppendLine(action.ToString());
-                }
-                #endregion
-
-                if (ShowDown)
-                {
-                    result.AppendLine("*** Show Down ***");
-                    for (int i = 0; i < players.Length; i++)
-                        if (!Folded[i])
-						result.AppendLine(string.Format("{0} shows [{1}], {2}", Players[i].Name,
-						        HoldemHand.Hand.MaskToString(HoleCards[i]),
-                                HoldemHand.Hand.DescriptionFromMask(Flop | Turn | River | hc[i]).ToLower()));
-                }
-
-                if (Winners != null)
-                {
-                    result.AppendLine("*** Summary ***");
-                    foreach (Winner winner in Winners)
-                    {
-                        result.AppendFormat("{0} collected {1} from {2}", winner.Player, winner.Amount, winner.Pot);
-                        result.AppendLine();
-                    }
-                    //TODO: output summaries
-                }
-                return result.ToString();
+                //TODO: output summaries
+            }
+            return result.ToString();
         }
     }
 }

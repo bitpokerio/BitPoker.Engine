@@ -12,7 +12,7 @@ namespace BitPoker.Engine.Tests
         private Dictionary<string, UInt64> namesToChips;
         
         [Fact]
-        public void TestBlinds()
+        public void Should_Add_Valid_Blinds()
         {
             namesToChips = new Dictionary<string, UInt64>();
             namesToChips["Player0"] = 200;
@@ -48,6 +48,42 @@ namespace BitPoker.Engine.Tests
             Assert.True(4 == action.Amount);
             Assert.Equal(Engine.Action.ActionTypes.Raise, action.ActionType);
 
+            betMan.Commit(action);
+            Assert.False(betMan.RoundOver);
+        }
+        
+        [Fact]
+        public void TestNoLimitRaising()
+        {
+            UInt64[] blinds = new UInt64[] { 2, 4 };
+            betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+
+            Action[] actions = new Action[] {
+                new Action("Player0", Action.ActionTypes.PostSmallBlind, 2),
+                new Action("Player1", Action.ActionTypes.PostBigBlind, 4),
+                new Action("Player2", Action.ActionTypes.Bet, 6),//should be corrected to Raise 8
+                new Action("Player3", Action.ActionTypes.Raise, 20),
+                new Action("Player4", Action.ActionTypes.Raise, 0)//should be corrected to 32
+            };
+
+            betMan.Commit(actions[0]);
+            betMan.Commit(actions[1]);
+
+            Action action = betMan.GetValidatedAction(actions[2]);
+            Assert.True(8 == action.Amount);
+            Assert.Equal(Action.ActionTypes.Raise, action.ActionType);
+            betMan.Commit(action);
+            Assert.False(betMan.RoundOver);
+
+            action = betMan.GetValidatedAction(actions[3]);
+            Assert.True(20 == action.Amount);
+            Assert.Equal(Action.ActionTypes.Raise, action.ActionType);
+            betMan.Commit(action);
+            Assert.False(betMan.RoundOver);
+
+            action = betMan.GetValidatedAction(actions[4]);
+            Assert.True(32 == action.Amount);
+            Assert.Equal(Action.ActionTypes.Raise, action.ActionType);
             betMan.Commit(action);
             Assert.False(betMan.RoundOver);
         }

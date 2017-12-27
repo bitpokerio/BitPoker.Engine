@@ -98,10 +98,10 @@ namespace BitPoker.Engine
         }
         #endregion
         
-        
         public void Sign(String privateKey)
         {
-            this.Signature = "";
+            NBitcoin.Key key = NBitcoin.Key.Parse(privateKey);
+            this.Signature = key.SignMessage(this.ToString());
         }
 
         #region Operator Overloads

@@ -4,8 +4,6 @@ using System.Text;
 
 namespace holdem_engine
 {
-    
-
     /// <summary>
     /// A pot is defined as an amount of money which is currently able
     /// to be won by only those who are eligible.

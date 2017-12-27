@@ -127,15 +127,5 @@ namespace test_holdem_engine
             betMan.Commit(action);
             Assert.IsFalse(betMan.RoundOver);
         }
-
-        [Test]
-        public void TestLimitBetting()
-        {
-        }
-
-        [Test]
-        public void TestPotLimitBetting()
-        {
-        }
     }
 }
