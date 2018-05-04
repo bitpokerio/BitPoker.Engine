@@ -10,7 +10,7 @@ namespace BitPoker.Engine
     /// 
     /// Author: Wesley Tansey
     /// </summary>
-    public class PotManager : IEnumerable<Pot>
+    public class PotManager : IEnumerable<Pot>, IPotManager
     {
         #region Member Variables
         //Dictionary<string, PlayerPotInfo> players;
@@ -46,7 +46,7 @@ namespace BitPoker.Engine
         /// </summary>
         public UInt64 Total { get; set; }
 
-        public List<Pot> Pots
+        public IList<Pot> Pots
         {
             get { if (updateNeeded) UpdatePots(); return pots; }
         }
@@ -97,6 +97,11 @@ namespace BitPoker.Engine
             }
             pots.Add(main);
         }
+        
+        public PotManager(IEnumerable<Action> actions) 
+        {
+        }
+        
         #endregion
 
         #region Public Methods
@@ -255,14 +260,13 @@ namespace BitPoker.Engine
                         remainingPot.Add(tempCom[i]);
                 }
             }
+            
             if(remainingPot.Size > 0)
                 result.Add(remainingPot);
 
 
             tempPot = 0;
-
             updateNeeded = false;
-
             pots = result;
         }
 

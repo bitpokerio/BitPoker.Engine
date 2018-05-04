@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitPoker.Engine.Tests", "Bi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitPoker.Engine", "BitPoker.Engine\BitPoker.Engine.csproj", "{B9DD3249-771D-40C6-9DC9-81BBF5B8C211}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{4CE0D07F-1EC3-4371-ACA4-BA5223410228}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppFull", "ConsoleAppFull\ConsoleAppFull.csproj", "{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug 2|Any CPU = Debug 2|Any CPU
@@ -39,6 +43,18 @@ Global
 		{B9DD3249-771D-40C6-9DC9-81BBF5B8C211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9DD3249-771D-40C6-9DC9-81BBF5B8C211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9DD3249-771D-40C6-9DC9-81BBF5B8C211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CE0D07F-1EC3-4371-ACA4-BA5223410228}.Debug 2|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CE0D07F-1EC3-4371-ACA4-BA5223410228}.Debug 2|Any CPU.Build.0 = Debug|Any CPU
+		{4CE0D07F-1EC3-4371-ACA4-BA5223410228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CE0D07F-1EC3-4371-ACA4-BA5223410228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CE0D07F-1EC3-4371-ACA4-BA5223410228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CE0D07F-1EC3-4371-ACA4-BA5223410228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}.Debug 2|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}.Debug 2|Any CPU.Build.0 = Debug|Any CPU
+		{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E59C4D9-BFC6-4B58-B52C-2864CA554B86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,6 +16,8 @@ namespace BitPoker.Engine
         /// </summary>
         public UInt64 Chips { get; set; }
         
+        public UInt64 Stack { get; set; }
+        
         /// <summary>
         /// The name of this player.
         /// </summary>
@@ -25,6 +27,8 @@ namespace BitPoker.Engine
         /// The brain of this player (i.e., the object that makes betting decisions).
         /// </summary>
         public IPlayer Brain { get; set; }
+        
+        public Boolean IsDealer { get; private set; }
         
         #endregion
 
@@ -38,6 +42,7 @@ namespace BitPoker.Engine
             this.Name = playerName;
             this.SeatNumber = seatNumber;
             this.Chips = chips;
+            this.Stack = chips;
         }
 
         public Seat(int seatNumber, string playerName, UInt64 chips, IPlayer brain)
@@ -45,6 +50,7 @@ namespace BitPoker.Engine
             this.Name = playerName;
             this.SeatNumber = seatNumber;
             this.Chips = chips;
+            this.Stack = chips;
             this.Brain = brain;
         }
         #endregion

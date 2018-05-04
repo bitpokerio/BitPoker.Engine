@@ -189,7 +189,7 @@ namespace holdem_engine
             
         }
 
-        private int GetFirstToAct(bool preflop)
+        public int GetFirstToAct(bool preflop)
         {
             int desired = ((preflop ? _bbIdx : _buttonIdx) + 1) % _seats.Length;
             while (!_playerIndices.Contains(desired)) { desired = (desired + 1) % _seats.Length; }
@@ -198,7 +198,7 @@ namespace holdem_engine
             return desired;
         }
 
-        private void AddAction(int pIdx, Action action, List<Action> curRoundActions)
+        public void AddAction(int pIdx, Action action, IList<Action> curRoundActions)
         {
             action = _betManager.GetValidatedAction(action);
             
@@ -226,7 +226,6 @@ namespace holdem_engine
                 _playerIndices.Remove(pIdx);
                 _history.AllIn[pIdx] = true;
             }
-            
         }
 
         /// <summary>

@@ -17,16 +17,20 @@ namespace holdem_engine
         PotManager _potManager;
         HandHistory _history;
         CircularList<int> _playerIndices;
-        Seat[] _seats;
+        
+        public Seat[] _seats;
+        
         int _buttonIdx;
+        
         int _utgIdx;
         int _bbIdx;
         CachedHand _cache;
 
-		public IEnumerable<Action> ValidNextActions { get; set;	}
+		public IEnumerable<Action> ValidNextActions { get; private set;	}
 
-        public HandServer()
+        public HandServer(Seat[] seats)
         {
+            _seats = seats;
         }
 
         public Action Validate(Action nextAction)
@@ -65,6 +69,7 @@ namespace holdem_engine
                 case BettingType.PotLimit: bs = BettingStructure.PotLimit; break;
                 default: throw new Exception("Unspecified betting structure.");
 	        }
+            
             _history = new HandHistory(_seats, handNum, button, blinds.ToArray(), ante, bs);
             #endregion
 
@@ -353,7 +358,7 @@ namespace holdem_engine
             return true;
         }
 
-        private void AddAction(int pIdx, Action action, List<Action> curRoundActions)
+        public void AddAction(int pIdx, Action action, List<Action> curRoundActions)
         {
             //Action unvalidatedAction = new Action(action.Name, action.ActionType, action.Amount, action.AllIn);
             action = _betManager.GetValidatedAction(action);
@@ -382,7 +387,6 @@ namespace holdem_engine
                 _playerIndices.Remove(pIdx);
                 _history.AllIn[pIdx] = true;
             }
-
         }
 
         /// <summary>

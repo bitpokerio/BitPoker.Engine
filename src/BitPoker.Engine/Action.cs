@@ -27,6 +27,8 @@ namespace BitPoker.Engine
         #endregion
 
         #region Properties
+        
+        public Guid Id { get; private set; }
 
         /// <summary>
         /// The name of the player performing this action
@@ -49,7 +51,7 @@ namespace BitPoker.Engine
         /// </summary>
         public bool AllIn { get; set; }
         
-        public String Signature { get; private set; }
+        //public String Signature { get; private set; }
         
         #endregion
 
@@ -62,6 +64,8 @@ namespace BitPoker.Engine
             PublicKey = "";
             this.ActionType = ActionTypes.None;
             this.Amount = 0;
+
+            this.Id = new Guid();
         }
 
         /// <summary>
@@ -74,19 +78,23 @@ namespace BitPoker.Engine
             this.PublicKey = publicKey;
             this.ActionType = type;
             this.Amount = 0;
+            
+            this.Id = new Guid();
         }
 
         /// <summary>
         /// Normal constructor.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="publicKey"></param>
         /// <param name="type"></param>
         /// <param name="amount"></param>
-        public Action(string name, ActionTypes type, UInt64 amount)
+        public Action(string publicKey, ActionTypes type, UInt64 amount)
         {
-            this.PublicKey = name;
+            this.PublicKey = publicKey;
             this.ActionType = type;
             this.Amount = amount;
+            
+            this.Id = new Guid();
         }
 
         public Action(string name, ActionTypes type, UInt64 amount, bool allIn)
@@ -95,14 +103,10 @@ namespace BitPoker.Engine
             this.ActionType = type;
             this.Amount = amount;
             this.AllIn = allIn;
+            
+            this.Id = new Guid();
         }
         #endregion
-        
-        public void Sign(String privateKey)
-        {
-            NBitcoin.Key key = NBitcoin.Key.Parse(privateKey);
-            this.Signature = key.SignMessage(this.ToString());
-        }
 
         #region Operator Overloads
         public bool Equals(Action a)
