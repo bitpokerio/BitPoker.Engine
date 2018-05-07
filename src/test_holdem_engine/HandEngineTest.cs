@@ -7,7 +7,7 @@ using Action = holdem_engine.Action;
 
 namespace test_holdem_engine
 {
-    [TestFixture]
+    //[TestFixture]
     public class HandEngineTest
     {
         private Seat[] seqPlayers;
@@ -27,6 +27,13 @@ namespace test_holdem_engine
                 seqPlayers[i].SeatNumber = i + 1;
             }
             blinds = new double[] { 1, 2 };
+        }
+
+        [Test]
+        public void Should_Get_ValidActions()
+        {
+            int i = engine.GetFirstToAct(true);
+
         }
 
         [Test]
@@ -57,6 +64,7 @@ namespace test_holdem_engine
                 new Action("Seq4", Action.ActionTypes.Raise, 4),
                 new Action("Seq4", Action.ActionTypes.Raise, 194)
             };
+
             seqPlayers[4].Brain = new SequencePlayer(actions4);
 
             //seq2 is on _buttonIdx (seat 3), seq3 is small blind ($1), seq4 is big blind ($2), hand number is 42
@@ -65,11 +73,11 @@ namespace test_holdem_engine
             
             Console.WriteLine(results);
 
-            Assert.AreEqual(194.0, seqPlayers[0].Chips);//raised to $4, called a $2 reraise and folded flop
-            Assert.AreEqual(200.0, seqPlayers[1].Chips);//folded preflop
-            Assert.AreEqual(200.0, seqPlayers[2].Chips);//folded preflop
-            Assert.AreEqual(199.0, seqPlayers[3].Chips);//folded preflop, but paid $1 small blind
-            Assert.AreEqual(207.0, seqPlayers[4].Chips);//won the hand, including $6 from seq0 and $1 small blind
+            Assert.AreEqual(194.0, seqPlayers[0].Chips); //raised to $4, called a $2 reraise and folded flop
+            Assert.AreEqual(200.0, seqPlayers[1].Chips); //folded preflop
+            Assert.AreEqual(200.0, seqPlayers[2].Chips); //folded preflop
+            Assert.AreEqual(199.0, seqPlayers[3].Chips); //folded preflop, but paid $1 small blind
+            Assert.AreEqual(207.0, seqPlayers[4].Chips); //won the hand, including $6 from seq0 and $1 small blind
         }
     }
 }

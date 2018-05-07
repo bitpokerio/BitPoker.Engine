@@ -219,7 +219,6 @@ namespace holdem_engine
 			if (action.Amount + committedTotal[action.Name] >= startingChips[action.Name])
 				return validateAllIn(action);
 
-
             return action;
         }
 

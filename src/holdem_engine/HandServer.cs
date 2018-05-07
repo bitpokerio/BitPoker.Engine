@@ -28,6 +28,10 @@ namespace holdem_engine
 
 		public IEnumerable<Action> ValidNextActions { get; private set;	}
 
+        public HandServer()
+        {
+        }
+
         public HandServer(Seat[] seats)
         {
             _seats = seats;
@@ -210,7 +214,7 @@ namespace holdem_engine
             _history.Winners = winners;
         }
 
-        bool restoreBets(PokerHandHistory.Action[] savedActions, List<Action> curRoundActions)
+        bool restoreBets(PokerHandHistory.Action[] savedActions, ICollection<Action> curRoundActions)
         {
             bool roundOver = false;
 
@@ -358,7 +362,7 @@ namespace holdem_engine
             return true;
         }
 
-        public void AddAction(int pIdx, Action action, List<Action> curRoundActions)
+        public void AddAction(int pIdx, Action action, ICollection<Action> curRoundActions)
         {
             //Action unvalidatedAction = new Action(action.Name, action.ActionType, action.Amount, action.AllIn);
             action = _betManager.GetValidatedAction(action);
