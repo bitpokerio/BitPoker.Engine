@@ -122,6 +122,7 @@ namespace test_holdem_engine
         HandServer server;
         PokerHand hand;
         CachedHand cache;
+
         [SetUp]
         public void SetUp()
         {
@@ -146,6 +147,7 @@ namespace test_holdem_engine
 			hand = fromString(bbHand);
 			var history = server.Resume(hand, cache);
 			var next = server.ValidNextActions;
+
 			Assert.AreEqual(next.Count(), 1);
 			var action = next.ElementAt(0);
 			Assert.AreEqual(action.Name, "OsoWhisper");

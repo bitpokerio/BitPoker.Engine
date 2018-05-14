@@ -13,7 +13,9 @@ namespace holdem_engine
     public class HandEngine 
     {
         #region Member Variables
+
         Seat[] _seats;
+
         BetManager _betManager;
         PotManager _potManager;
         HandHistory _history;
@@ -24,10 +26,111 @@ namespace holdem_engine
         CachedHand _cache;
         #endregion
 
+        /// <summary>
+        /// MAYBE ROUND OVER
+        /// </summary>
+        /// <value><c>true</c> if hand over; otherwise, <c>false</c>.</value>
+        public Boolean HandOver 
+        { 
+            get
+            {
+                return _history.ShowDown;
+            }
+        }
+
+        public Round CurrentRound
+        {
+            get
+            {
+                return _history.CurrentRound;
+            }
+        }
+
+        public IEnumerable<Action> GetValidActions()
+        {
+            List<Action> validActions = new List<Action>();
+
+            //TODO:  CHECK ROUND OVER OR HAND OVER
+            if (!HandOver)
+            {
+                int pIdx = 0; //GetFirstToAct();
+                var name = _seats[pIdx].Name;
+
+                Action fold = new Action(name, Action.ActionTypes.Fold);
+                fold = _betManager.GetValidatedAction(fold);
+                validActions.Add(fold);//may be check or fold
+                if (fold.ActionType == Action.ActionTypes.Fold)
+                {
+                    Action call = new Action(name, Action.ActionTypes.Call);
+                    call = _betManager.GetValidatedAction(call);
+                    validActions.Add(call);
+                }
+                Action minRaise = new Action(name, Action.ActionTypes.Raise, 0);
+                minRaise = _betManager.GetValidatedAction(minRaise);
+                if (minRaise.ActionType == Action.ActionTypes.Bet || minRaise.ActionType == Action.ActionTypes.Raise)
+                {
+                    validActions.Add(minRaise);
+
+                    // In no-limit and pot-limit, we return the valid raises as a pair of
+                    // (min, max) bets.
+                    if (!minRaise.AllIn && _history.BettingStructure != BettingStructure.Limit)
+                    {
+                        Action maxRaise = new Action(name, Action.ActionTypes.Raise, _seats[pIdx].Chips);
+                        maxRaise = _betManager.GetValidatedAction(maxRaise);
+                        if (maxRaise.Amount > minRaise.Amount)
+                            validActions.Add(maxRaise);
+                    }
+                }
+            }
+
+            return validActions;
+        }
+
         #region Constructors
         public HandEngine()
         {
         }
+
+        public HandEngine(Seat[] players, ulong handNumber, uint button, double[] blinds)
+        {
+            //todo: change
+            _seats = players;
+
+            _history = new HandHistory(_seats, handNumber, button, blinds, 0, BettingStructure.NoLimit);
+
+            _history.HoleCards = new ulong[_seats.Length];
+            _history.DealtCards = 0UL;
+            _history.Flop = 0UL;
+            _history.Turn = 0UL;
+            _history.River = 0UL;
+
+            //Create a new map from player names to player chips for the BetManager
+            Dictionary<string, double> namesToChips = new Dictionary<string, double>();
+
+            //Create a new list of players for the PlayerManager
+            _playerIndices = new CircularList<int>();
+            _playerIndices.Loop = true;
+
+            for (int i = 0; i < _seats.Length; i++)
+            {
+                namesToChips[_seats[i].Name] = _seats[i].Chips;
+                if (_seats[i].SeatNumber == _history.Button)
+                {
+                    _buttonIdx = i;
+                    _utgIdx = (i + 1) % _seats.Length;
+                }
+            }
+
+            for (int i = (_buttonIdx + 1) % _seats.Length; _playerIndices.Count < _seats.Length;)
+            {
+                _playerIndices.Add(i);
+                i = (i + 1) % _seats.Length;
+            }
+
+            _betManager = new BetManager(namesToChips, _history.BettingStructure, _history.AllBlinds, _history.Ante);
+            _potManager = new PotManager(_seats);
+        }
+
         #endregion
 
         /// <summary>
@@ -48,6 +151,7 @@ namespace holdem_engine
         public void PlayHand(HandHistory handHistory)
         {
             #region Hand Setup
+
             _seats = handHistory.Players;
             handHistory.HoleCards = new ulong[_seats.Length];
             handHistory.DealtCards = 0UL;
@@ -153,7 +257,7 @@ namespace holdem_engine
             uint[] strengths = new uint[_seats.Length];
             for (int i = 0; i < strengths.Length; i++)
                 if(!_history.Folded[i])
-                    strengths[i] = HoldemHand.Hand.Evaluate(_history.HoleCards[i] | _history.Board, 7);
+                    strengths[i] = Hand.Evaluate(_history.HoleCards[i] | _history.Board, 7);
             
             IList<Winner> winners = _potManager.GetWinners(strengths);
             _history.Winners = winners;
@@ -162,7 +266,7 @@ namespace holdem_engine
         /// <summary>
         /// Gets the bets from all the players still in the hand.
         /// </summary>
-        public void GetBets(List<Action> curRoundActions)
+        public void GetBets(IList<Action> curRoundActions)
         {
             bool roundOver = false;
             
@@ -176,7 +280,9 @@ namespace holdem_engine
                 _history.Hero = pIdx;
                 
                 //get the next player's action
-                Action.ActionTypes actionType; double amount;
+                Action.ActionTypes actionType; 
+                double amount;
+
                 _seats[pIdx].Brain.GetAction(_history, out actionType, out amount);
 
                 AddAction(pIdx, new Action(_seats[pIdx].Name, actionType, amount), curRoundActions);
@@ -189,6 +295,11 @@ namespace holdem_engine
             
         }
 
+        /// <summary>
+        /// Gets the first to act.
+        /// </summary>
+        /// <returns>The first to act.</returns>
+        /// <param name="preflop">If set to <c>true</c> preflop.</param>
         public int GetFirstToAct(bool preflop)
         {
             int desired = ((preflop ? _bbIdx : _buttonIdx) + 1) % _seats.Length;
@@ -198,7 +309,42 @@ namespace holdem_engine
             return desired;
         }
 
-        public void AddAction(int pIdx, Action action, IList<Action> curRoundActions)
+        public int GetNextToAct()
+        {
+            return 0;
+        }
+
+        public void AddAction(int pIdx, Action action)
+        {
+            action = _betManager.GetValidatedAction(action);
+
+            _betManager.Commit(action);
+            //curRoundActions.Add(action);
+
+            if (action.Amount > 0)
+                _seats[pIdx].Chips -= action.Amount;
+
+            //update the pots
+            _potManager.AddAction(pIdx, action);
+
+            if (action.ActionType == Action.ActionTypes.None)
+                throw new Exception("Must have an action");
+
+            //if the player either folded or went all-in, they can no longer
+            //bet so remove them from the player pool
+            if (action.ActionType == Action.ActionTypes.Fold)
+            {
+                _playerIndices.Remove(pIdx);
+                _history.Folded[pIdx] = true;
+            }
+            else if (action.AllIn)
+            {
+                _playerIndices.Remove(pIdx);
+                _history.AllIn[pIdx] = true;
+            }
+        }
+
+        public void AddAction(int pIdx, Action action, ICollection<Action> curRoundActions)
         {
             action = _betManager.GetValidatedAction(action);
             
@@ -288,5 +434,4 @@ namespace holdem_engine
             _history.DealtCards = _history.DealtCards | _history.River;
         }
     }
- 
 }

@@ -45,7 +45,7 @@ namespace holdem_engine
         public int CurrentBetLevel { get; set; }
         public Round CurrentRound { get; set; }
 
-        public List<Action> CurrentActions
+        public IEnumerable<Action> CurrentActions
         {
             get
             {
@@ -103,34 +103,34 @@ namespace holdem_engine
             set { winners = value; }
         }
         
-        public List<Action> PredealActions
+        public IList<Action> PredealActions
         {
             get { return predealActions; }
-            set { predealActions = value; }
+            //set { predealActions = value; }
         }
         
-        public List<Action> PreflopActions
+        public IList<Action> PreflopActions
         {
             get { return preflopActions; }
-            set { preflopActions = value; }
+            //set { preflopActions = value; }
         }
         
-        public List<Action> FlopActions
+        public IList<Action> FlopActions
         {
             get { return flopActions; }
-            set { flopActions = value; }
+            //set { flopActions = value; }
         }
 
-        public List<Action> TurnActions
+        public IList<Action> TurnActions
         {
             get { return turnActions; }
-            set { turnActions = value; }
+            //set { turnActions = value; }
         }
 
-        public List<Action> RiverActions
+        public IList<Action> RiverActions
         {
             get { return riverActions; }
-            set { riverActions = value; }
+            //set { riverActions = value; }
         }
 
         public double[] StartingChips

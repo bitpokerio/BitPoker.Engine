@@ -33,7 +33,7 @@ namespace test_holdem_engine
 				Hands = new PokerHandHistory.PokerHand[] { xml }
 			};
 
-			StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 			using(TextWriter writer = new StringWriter(sb))
 			{
 				XmlSerializer ser = new XmlSerializer(typeof(PokerHandHistory.PokerHandXML));
