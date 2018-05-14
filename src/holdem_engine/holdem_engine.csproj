@@ -59,6 +59,7 @@
     <Compile Include="Winner.cs" />
     <Compile Include="CardExtensions.cs" />
     <Compile Include="ListExtensions.cs" />
+    <Compile Include="TableManger.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

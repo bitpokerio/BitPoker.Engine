@@ -72,14 +72,12 @@ namespace holdem_engine
             get { return allBlinds; }
             set { allBlinds = value; }
         }
-        
 
         public ulong DealtCards
         {
             get { return dealtCards; }
             set { dealtCards = value; }
         }
-
 
         public ulong Flop
         {

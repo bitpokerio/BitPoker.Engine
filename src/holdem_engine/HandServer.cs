@@ -28,9 +28,9 @@ namespace holdem_engine
 
 		public IEnumerable<Action> ValidNextActions { get; private set;	}
 
-        public HandServer(Seat[] seats)
+        public HandServer()
         {
-            _seats = seats;
+            //_seats = seats;
         }
 
         public Action Validate(Action nextAction)
