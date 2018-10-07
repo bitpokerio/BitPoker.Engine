@@ -27,6 +27,7 @@ namespace BitPoker.Engine
 
         public HandServer()
         {
+            
         }
 
         public Action Validate(Action nextAction)

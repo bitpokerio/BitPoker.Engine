@@ -32,7 +32,8 @@ namespace BitPoker.Engine.Tests
         [Fact]
         public void TestTotal()
         {
-            Action[] actions = new Action[] {
+            Action[] actions = new Action[] 
+            {
                 new Action("Player3", Action.ActionTypes.PostSmallBlind, 1),
                 new Action("Player4", Action.ActionTypes.PostBigBlind, 2),
                 new Action("Player0", Action.ActionTypes.Raise, 4),

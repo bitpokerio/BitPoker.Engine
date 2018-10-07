@@ -13,7 +13,6 @@ namespace BitPoker.Engine
     /// </summary>
     public class HandHistory : IComparable<HandHistory>
     {
-        #region Member Variables
         private ulong handNumber;
         private uint button;
         private double stakes;
@@ -39,9 +38,7 @@ namespace BitPoker.Engine
         private double[] startingChips;
         private int maxPlayersPerTable;
         private ulong dealtCards;
-        #endregion
 
-        #region Properties
         public int CurrentBetLevel { get; set; }
         public Round CurrentRound { get; set; }
 
@@ -79,7 +76,6 @@ namespace BitPoker.Engine
             get { return dealtCards; }
             set { dealtCards = value; }
         }
-
 
         public ulong Flop
         {
@@ -227,9 +223,7 @@ namespace BitPoker.Engine
         /// The index of the player who has to act currently
         /// </summary>
         public int Hero { get; set; }
-        #endregion
 
-        #region Constructors
         public HandHistory(Seat[] players, ulong handNumber, uint button, double[] blinds, double ante, BettingStructure bs)
         {
             this.button = button;
@@ -267,9 +261,7 @@ namespace BitPoker.Engine
             CurrentRound = Round.Predeal;
             CurrentBetLevel = 1;
         }
-        #endregion
 
-        #region Comparison methods
         /// <summary>
         /// All comparisons are done simply on a HandNumber basis.  If this hand number
         /// is greater than hand's hand number, this method returns 1.  If it's less
@@ -289,8 +281,7 @@ namespace BitPoker.Engine
             }
             return 0;
         }
-
-        #endregion
+        
 
 		//public PokerHand ToXmlHand()
 		//{
@@ -453,7 +444,7 @@ namespace BitPoker.Engine
             StringBuilder result = new StringBuilder();
             
             result.Append(string.Format("{0} Game #{1}:  Hold'em ", site, handNumber));
-            #region Betting Structure
+            
             switch (bs)
             {
                 case BettingStructure.Limit: result.Append("Limit ");
@@ -464,7 +455,6 @@ namespace BitPoker.Engine
                     break;
                 default: throw new Exception("Unknown betting structure ");
             }
-            #endregion
 
             result.AppendLine("Seat #" + Button + " is the button");
 
@@ -489,7 +479,6 @@ namespace BitPoker.Engine
             foreach (Action action in PreflopActions)
                 result.AppendLine(action.ToString());
 
-            #region Print post-flop actions and board cards.
             if (Flop != 0UL)
             {
                 result.AppendLine("*** Flop *** [" + HoldemHand.Hand.MaskToString(Flop) + "]");
@@ -518,7 +507,6 @@ namespace BitPoker.Engine
                 foreach (Action action in RiverActions)
                     result.AppendLine(action.ToString());
             }
-            #endregion
 
             if (ShowDown)
             {
