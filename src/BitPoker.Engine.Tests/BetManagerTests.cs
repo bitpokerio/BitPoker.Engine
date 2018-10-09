@@ -8,8 +8,6 @@ namespace BitPoker.Engine.Tests
 {
     public class BetManagerTests
     {
-        private BetManager betMan;
-
         private Dictionary<string, UInt64> namesToChips;
 
         [Fact]
@@ -23,11 +21,11 @@ namespace BitPoker.Engine.Tests
             namesToChips["Player4"] = 200;
         
             UInt64[] blinds = new UInt64[] {1, 2};
-            betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
 
             FastPokerAction[] actions = new FastPokerAction[]
             {
-                new FastPokerAction("Player3", FastPokerAction.ActionTypes.PostSmallBlind, 25)
+                new FastPokerAction("Player0", FastPokerAction.ActionTypes.PostSmallBlind, 1)
             };
 
             FastPokerAction action = betMan.GetValidatedAction(actions[0]);
@@ -46,7 +44,7 @@ namespace BitPoker.Engine.Tests
             namesToChips["Player4"] = 200;
         
             UInt64[] blinds = new UInt64[] {1, 2};
-            betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
 
             FastPokerAction[] actions = new FastPokerAction[] 
             {
@@ -81,7 +79,7 @@ namespace BitPoker.Engine.Tests
         public void Should_Be_Able_To_Raise()
         {
             UInt64[] blinds = new UInt64[] { 2, 4 };
-            betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
 
             Action[] actions = new Action[]
             {
