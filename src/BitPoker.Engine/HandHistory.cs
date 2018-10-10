@@ -13,7 +13,6 @@ namespace BitPoker.Engine
     /// </summary>
     public class HandHistory : IComparable<HandHistory>
     {
-        #region Member Variables
         private ulong handNumber;
         private uint button;
         private double stakes;
@@ -29,19 +28,17 @@ namespace BitPoker.Engine
         private ulong turn;
         private ulong river;
         private BettingStructure bs;
-        private List<Action> predealActions;
-        private List<Action> preflopActions;
-        private List<Action> flopActions;
-        private List<Action> turnActions;
-        private List<Action> riverActions;
+        private IList<Action> predealActions;
+        private IList<Action> preflopActions;
+        private IList<Action> flopActions;
+        private IList<Action> turnActions;
+        private IList<Action> riverActions;
         private IList<Winner> winners;
         private Seat[] players;
         private double[] startingChips;
         private int maxPlayersPerTable;
         private ulong dealtCards;
-        #endregion
 
-        #region Properties
         public int CurrentBetLevel { get; set; }
         public Round CurrentRound { get; set; }
 
@@ -72,14 +69,12 @@ namespace BitPoker.Engine
             get { return allBlinds; }
             set { allBlinds = value; }
         }
-        
 
         public ulong DealtCards
         {
             get { return dealtCards; }
             set { dealtCards = value; }
         }
-
 
         public ulong Flop
         {
@@ -123,13 +118,13 @@ namespace BitPoker.Engine
             set { flopActions = value; }
         }
 
-        public List<Action> TurnActions
+        public IList<Action> TurnActions
         {
             get { return turnActions; }
             set { turnActions = value; }
         }
 
-        public List<Action> RiverActions
+        public IList<Action> RiverActions
         {
             get { return riverActions; }
             set { riverActions = value; }

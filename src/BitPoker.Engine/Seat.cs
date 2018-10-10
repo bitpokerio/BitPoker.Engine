@@ -4,8 +4,6 @@ namespace BitPoker.Engine
 {
     public class Seat
     {
-        #region Properties
-        
         /// <summary>
         /// The seat number that this player is at
         /// </summary>
@@ -30,9 +28,6 @@ namespace BitPoker.Engine
         
         public Boolean IsDealer { get; private set; }
         
-        #endregion
-
-        #region Constructors
         public Seat()
         {
         }
@@ -53,6 +48,5 @@ namespace BitPoker.Engine
             this.Stack = chips;
             this.Brain = brain;
         }
-        #endregion
     }
 }

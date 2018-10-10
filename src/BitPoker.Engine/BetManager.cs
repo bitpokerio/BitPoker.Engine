@@ -12,8 +12,6 @@ namespace BitPoker.Engine
     /// </summary>
     public class BetManager : IBetManager
     {
-        #region Member Variables
-        
         private UInt64 minimumRaise;
         private UInt64 mostCommitted;//the most amount of money a player has committed so far.
         private UInt64 smallBlind;
@@ -33,10 +31,6 @@ namespace BitPoker.Engine
         private int numberPlayersCanStillBet; //number of players who can still bet (i.e. not folded nor all-in)
         private int betLevel;
         private int round;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// A property that can only be true once per round.  When you access
@@ -123,16 +117,14 @@ namespace BitPoker.Engine
         {
             get { return numberPlayersCanStillBet; }
         }
-        #endregion
 
-        #region Constructors
         /// <summary>
         /// Creates a new BetManager for the hand.
         /// </summary>
         /// <param name="namesToChips">A dictionary that maps player names to the amount of money they started the hand with.</param>
         /// <param name="structure">The type of betting structure this hand is.</param>
         /// <param name="ante">The ante for this hand. If there is no ante, it should be set to -1.</param>
-        public BetManager(Dictionary<string,UInt64> namesToChips, BettingStructure structure, UInt64[] blinds, UInt64 ante )
+        public BetManager(Dictionary<string,UInt64> namesToChips, BettingStructure structure, UInt64[] blinds, UInt64 ante)
         {
             round = 0;
             bs = structure;
@@ -157,7 +149,6 @@ namespace BitPoker.Engine
                 startingChips[name] = namesToChips[name];
             }
         }
-        #endregion
 
         /// <summary>
         /// Checks the given Action object to make sure it's valid.

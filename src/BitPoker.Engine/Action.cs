@@ -11,7 +11,6 @@ namespace BitPoker.Engine
     /// </summary>
     public class Action : IEquatable<Action>
     {
-        #region ActionTypes Enumeration
         public enum ActionTypes
         {
             None,
@@ -24,7 +23,6 @@ namespace BitPoker.Engine
             Bet,
             Raise
         }
-        #endregion
 
         #region Properties
         

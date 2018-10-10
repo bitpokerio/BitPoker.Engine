@@ -50,8 +50,8 @@ namespace test_holdem_engine
 
             holdem_engine.HandHistory history = new holdem_engine.HandHistory(players, 0, 0, blinds, 0, holdem_engine.BettingStructure.NoLimit);
 
-            var actual = history.CurrentActions;
-            //var actual = history.CurrentRound;
+            //var actual = history.CurrentActions;
+            var actual = history.CurrentRound;
 
             Assert.AreEqual(holdem_engine.Round.Predeal, actual);
         }

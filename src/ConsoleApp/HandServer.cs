@@ -136,13 +136,14 @@ namespace BitPoker.Engine
             if (_betManager.CanStillBet > 1)
             {
                 if (savedHand.Rounds.Length < 2)
-					savedHand.Rounds = new PokerHandHistory.Round[]{savedHand.Rounds[0], new PokerHandHistory.Round(){Actions = new PokerHandHistory.Action[0]}};
+					savedHand.Rounds = new PokerHandHistory.Round[]{savedHand.Rounds[0], new PokerHandHistory.Round() {Actions = new PokerHandHistory.Action[0]}};
 				else if(savedHand.Rounds[1].Actions == null)
 					savedHand.Rounds[1].Actions = new PokerHandHistory.Action[0];
 
                 if (!restoreBets(savedHand.Rounds[1].Actions, _history.FlopActions))
                     return _history;
             }
+
             if (_betManager.In <= 1)
             {
                 payWinners();

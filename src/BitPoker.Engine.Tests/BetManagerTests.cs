@@ -9,7 +9,44 @@ namespace BitPoker.Engine.Tests
     public class BetManagerTests
     {
         private BetManager betMan;
+        
         private Dictionary<string, UInt64> namesToChips;
+
+        [Fact]
+        public void Should_Add_Small_Blind()
+        {
+            namesToChips = new Dictionary<string, UInt64>();
+            namesToChips["Player0"] = 200;
+            namesToChips["Player1"] = 200;
+            namesToChips["Player2"] = 200;
+            namesToChips["Player3"] = 200;
+            namesToChips["Player4"] = 200;
+        
+            UInt64[] blinds = new UInt64[]{1,2};
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+
+            FastPokerAction action = betMan.GetValidatedAction(new FastPokerAction("Player3", FastPokerAction.ActionTypes.PostSmallBlind, 1));
+            Assert.True(1 == action.Amount);
+            Assert.Equal(FastPokerAction.ActionTypes.PostSmallBlind, action.ActionType);
+        }
+
+        [Fact]
+        public void Should_Add_Big_Blind()
+        {
+            namesToChips = new Dictionary<string, UInt64>();
+            namesToChips["Player0"] = 200;
+            namesToChips["Player1"] = 200;
+            namesToChips["Player2"] = 200;
+            namesToChips["Player3"] = 200;
+            namesToChips["Player4"] = 200;
+        
+            UInt64[] blinds = new UInt64[]{1,2};
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+
+            FastPokerAction action = betMan.GetValidatedAction(new FastPokerAction("Player3", FastPokerAction.ActionTypes.PostSmallBlind, 1));
+            Assert.True(1 == action.Amount);
+            Assert.Equal(FastPokerAction.ActionTypes.PostSmallBlind, action.ActionType);
+        }
         
         [Fact]
         public void Should_Add_Valid_Blinds()
@@ -30,7 +67,7 @@ namespace BitPoker.Engine.Tests
                 new FastPokerAction("Player0", FastPokerAction.ActionTypes.Raise, 1),
             };
 
-            FastPokerAction action = betMan.GetValidatedAction(actions[0]);
+            FastPokerAction action = betMan.GetValidatedAction(new FastPokerAction("Player3", FastPokerAction.ActionTypes.PostSmallBlind, 1));
             Assert.True(1 == action.Amount);
             Assert.Equal(FastPokerAction.ActionTypes.PostSmallBlind, action.ActionType);
             
