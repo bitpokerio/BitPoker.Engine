@@ -20,7 +20,6 @@ namespace holdem_engine
         /// </summary>
         public void Seat()
         {
-            
         }
     }
 }

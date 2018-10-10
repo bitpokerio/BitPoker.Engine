@@ -8,8 +8,6 @@ namespace BitPoker.Engine.Tests
 {
     public class BetManagerTests
     {
-        private BetManager betMan;
-        
         private Dictionary<string, UInt64> namesToChips;
 
         [Fact]
@@ -22,14 +20,19 @@ namespace BitPoker.Engine.Tests
             namesToChips["Player3"] = 200;
             namesToChips["Player4"] = 200;
         
-            UInt64[] blinds = new UInt64[]{1,2};
+            UInt64[] blinds = new UInt64[] {1, 2};
             BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
 
-            FastPokerAction action = betMan.GetValidatedAction(new FastPokerAction("Player3", FastPokerAction.ActionTypes.PostSmallBlind, 1));
+            FastPokerAction[] actions = new FastPokerAction[]
+            {
+                new FastPokerAction("Player0", FastPokerAction.ActionTypes.PostSmallBlind, 1)
+            };
+
+            FastPokerAction action = betMan.GetValidatedAction(actions[0]);
             Assert.True(1 == action.Amount);
             Assert.Equal(FastPokerAction.ActionTypes.PostSmallBlind, action.ActionType);
         }
-
+        
         [Fact]
         public void Should_Add_Big_Blind()
         {
@@ -58,10 +61,11 @@ namespace BitPoker.Engine.Tests
             namesToChips["Player3"] = 200;
             namesToChips["Player4"] = 200;
         
-            UInt64[] blinds = new UInt64[]{1,2};
-            betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+            UInt64[] blinds = new UInt64[] {1, 2};
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
 
-            FastPokerAction[] actions = new FastPokerAction[] {
+            FastPokerAction[] actions = new FastPokerAction[] 
+            {
                 new FastPokerAction("Player3", FastPokerAction.ActionTypes.PostSmallBlind, 25),
                 new FastPokerAction("Player4", FastPokerAction.ActionTypes.PostBigBlind, 50),
                 new FastPokerAction("Player0", FastPokerAction.ActionTypes.Raise, 1),
@@ -90,12 +94,13 @@ namespace BitPoker.Engine.Tests
         }
         
         [Fact]
-        public void TestNoLimitRaising()
+        public void Should_Be_Able_To_Raise()
         {
             UInt64[] blinds = new UInt64[] { 2, 4 };
-            betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
+            BetManager betMan = new BetManager(namesToChips, BettingStructure.NoLimit, blinds, 0);
 
-            Action[] actions = new Action[] {
+            Action[] actions = new Action[]
+            {
                 new Action("Player0", Action.ActionTypes.PostSmallBlind, 2),
                 new Action("Player1", Action.ActionTypes.PostBigBlind, 4),
                 new Action("Player2", Action.ActionTypes.Bet, 6),//should be corrected to Raise 8
