@@ -13,9 +13,6 @@ namespace BitPoker.Engine
     /// </summary>
     public class HandHistory : IComparable<HandHistory>
     {
-        private ulong handNumber;
-        private uint button;
-        private double stakes;
         private double smallBlind;
         private double bigBlind;
         private double[] allBlinds;
@@ -28,12 +25,12 @@ namespace BitPoker.Engine
         private ulong turn;
         private ulong river;
         private BettingStructure bs;
-        private IList<Action> predealActions;
-        private IList<Action> preflopActions;
-        private IList<Action> flopActions;
-        private IList<Action> turnActions;
-        private IList<Action> riverActions;
-        private IList<Winner> winners;
+        private List<Action> predealActions;
+        private List<Action> preflopActions;
+        private List<Action> flopActions;
+        private List<Action> turnActions;
+        private List<Action> riverActions;
+        private List<Winner> winners;
         private Seat[] players;
         private double[] startingChips;
         private int maxPlayersPerTable;
@@ -42,7 +39,7 @@ namespace BitPoker.Engine
         public int CurrentBetLevel { get; set; }
         public Round CurrentRound { get; set; }
 
-        public List<Action> CurrentActions
+        public IList<Action> CurrentActions
         {
             get
             {
@@ -64,35 +61,13 @@ namespace BitPoker.Engine
             get { return flop | turn | river; }
         }
 
-        public double[] AllBlinds
-        {
-            get { return allBlinds; }
-            set { allBlinds = value; }
-        }
+        public double[] AllBlinds { get; set; }
 
-        public ulong DealtCards
-        {
-            get { return dealtCards; }
-            set { dealtCards = value; }
-        }
+        public ulong DealtCards { get; set; }
 
-        public ulong Flop
-        {
-            get { return flop; }
-            set { flop = value; }
-        }
+        public ulong Flop { get; set; }
 
-        public ulong Turn
-        {
-            get { return turn; }
-            set { turn = value; }
-        }
-
-        public ulong River
-        {
-            get { return river; }
-            set { river = value; }
-        }
+        public ulong River { get; set; }
 
         public IList<Winner> Winners
         {
@@ -100,19 +75,19 @@ namespace BitPoker.Engine
             set { winners = value; }
         }
         
-        public List<Action> PredealActions
+        public IList<Action> PredealActions
         {
             get { return predealActions; }
             set { predealActions = value; }
         }
         
-        public List<Action> PreflopActions
+        public IList<Action> PreflopActions
         {
             get { return preflopActions; }
             set { preflopActions = value; }
         }
         
-        public List<Action> FlopActions
+        public IList<Action> FlopActions
         {
             get { return flopActions; }
             set { flopActions = value; }
@@ -142,35 +117,15 @@ namespace BitPoker.Engine
             set { players = value; }
         }
 
-        public int MaxPlayersPerTable
-        {
-            get { return maxPlayersPerTable; }
-            set { maxPlayersPerTable = value; }
-        }
+        public int MaxPlayersPerTable { get; set; }
 
-        public string Site
-        {
-            get { return site; }
-            set { site = value; }
-        }
+        public string Site { get; set; }
 
-        public string TableName
-        {
-            get { return tableName; }
-            set { tableName = value; }
-        }
+        public string TableName { get; set; }
 
-        public double Stakes
-        {
-            get { return stakes; }
-            set { stakes = value; }
-        }
+        public double Stakes { get; set; }
 
-        public double Pot
-        {
-            get { return pot; }
-            set { pot = value; }
-        }
+        public double Pot { get; set; }
 
         public BettingStructure BettingStructure
         {
@@ -184,38 +139,20 @@ namespace BitPoker.Engine
             set { hc = value; }
         }
 
-        public double Ante
-        {
-            get { return ante; }
-            set { ante = value; }
-        }
+        public double Ante { get; private set; }
 
-        public double BigBlind
-        {
-            get { return bigBlind; }
-            set { bigBlind = value; }
-        }
+        public double BigBlind { get; private set;}
 
-        public double SmallBlind
-        {
-            get { return smallBlind; }
-            set { smallBlind = value; }
-        }
+        public double SmallBlind { get; private set; }
 
-        public uint Button
-        {
-            get { return button; }
-            set { button = value; }
-        }
+        public uint Button { get; private set ;}
                    
-        public ulong HandNumber
-        {
-            get { return handNumber; }
-            set { handNumber = value; }
-        }
+        public ulong HandNumber { get; set; }
         
         public bool[] Folded { get; set; }
+
         public bool[] AllIn { get; set; }
+
         public bool ShowDown { get; set; }
 
         /// <summary>
@@ -225,7 +162,7 @@ namespace BitPoker.Engine
 
         public HandHistory(Seat[] players, ulong handNumber, uint button, double[] blinds, double ante, BettingStructure bs)
         {
-            this.button = button;
+            this.Button = button;
             predealActions = new List<Action>();
             preflopActions = new List<Action>();
             flopActions = new List<Action>();
@@ -239,7 +176,7 @@ namespace BitPoker.Engine
             for (int i = 0; i < startingChips.Length; i++)
                 startingChips[i] = players[i].Chips;
 
-            this.handNumber = handNumber;
+            this.HandNumber = handNumber;
             switch (blinds.Length)
             {
                 case 1: this.bigBlind = blinds[0];
@@ -270,11 +207,11 @@ namespace BitPoker.Engine
         /// <returns></returns>
         public int CompareTo(HandHistory hand)
         {
-            if (handNumber > hand.handNumber)
+            if (this.HandNumber > hand.HandNumber)
             {
                 return 1;
             }
-            if (handNumber < hand.handNumber)
+            if (this.HandNumber < hand.HandNumber)
             {
                 return -1;
             }
@@ -442,7 +379,7 @@ namespace BitPoker.Engine
 		{
             StringBuilder result = new StringBuilder();
             
-            result.Append(string.Format("{0} Game #{1}:  Hold'em ", site, handNumber));
+            result.Append(string.Format("{0} Game #{1}:  Hold'em ", site, this.HandNumber));
             
             switch (bs)
             {
@@ -472,15 +409,14 @@ namespace BitPoker.Engine
             for (int i = 0; i < Players.Length; i++)
                 if (HoleCards[i] != 0UL)
 					if (showAllHolecards || i == this.Hero)
-                    	result.AppendLine(string.Format("Dealt to {0} [{1}]", Players[i].Name,
-                                                    HoldemHand.Hand.MaskToString(HoleCards[i])));
+                    	//result.AppendLine(string.Format("Dealt to {0} [{1}]", Players[i].Name, HoldemHand.Hand.MaskToString(HoleCards[i])));
 
             foreach (Action action in PreflopActions)
                 result.AppendLine(action.ToString());
 
             if (Flop != 0UL)
             {
-                result.AppendLine("*** Flop *** [" + HoldemHand.Hand.MaskToString(Flop) + "]");
+                //result.AppendLine("*** Flop *** [" + Hand.MaskToString(Flop) + "]");
 
                 foreach (Action action in FlopActions)
                     result.AppendLine(action.ToString());
@@ -488,8 +424,7 @@ namespace BitPoker.Engine
             
             if (Turn != 0UL)
             {
-                result.AppendLine("*** Turn *** [" + HoldemHand.Hand.MaskToString(Flop) + "] ["
-                                                   + HoldemHand.Hand.MaskToString(Turn) + "]");
+                //result.AppendLine("*** Turn *** [" + HoldemHand.Hand.MaskToString(Flop) + "] [" + HoldemHand.Hand.MaskToString(Turn) + "]");
 
                 foreach (Action action in TurnActions)
                     result.AppendLine(action.ToString());
@@ -497,11 +432,11 @@ namespace BitPoker.Engine
                 
             if (River != 0UL)
             {
-                result.AppendLine("*** River *** ["
-                                      + HoldemHand.Hand.MaskToString(Flop)
-                                      + " " + HoldemHand.Hand.MaskToString(Turn)
-                                      + "] ["
-                                      + HoldemHand.Hand.MaskToString(River) + "]");
+                // result.AppendLine("*** River *** ["
+                //                       + HoldemHand.Hand.MaskToString(Flop)
+                //                       + " " + HoldemHand.Hand.MaskToString(Turn)
+                //                       + "] ["
+                //                       + HoldemHand.Hand.MaskToString(River) + "]");
 
                 foreach (Action action in RiverActions)
                     result.AppendLine(action.ToString());
@@ -512,9 +447,9 @@ namespace BitPoker.Engine
                 result.AppendLine("*** Show Down ***");
                 for (int i = 0; i < players.Length; i++)
                     if (!Folded[i])
-					result.AppendLine(string.Format("{0} shows [{1}], {2}", Players[i].Name,
-					        HoldemHand.Hand.MaskToString(HoleCards[i]),
-                            HoldemHand.Hand.DescriptionFromMask(Flop | Turn | River | hc[i]).ToLower()));
+					// result.AppendLine(string.Format("{0} shows [{1}], {2}", Players[i].Name,
+					//         HoldemHand.Hand.MaskToString(HoleCards[i]),
+                    //         HoldemHand.Hand.DescriptionFromMask(Flop | Turn | River | hc[i]).ToLower()));
             }
 
             if (Winners != null)

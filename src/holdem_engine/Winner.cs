@@ -19,7 +19,7 @@ namespace holdem_engine
         {
             Player = player;
             Pot = pot;
-            Amount = amount;            
+            Amount = amount;
         }
     }
 }

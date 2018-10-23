@@ -13,7 +13,7 @@ namespace BitPoker.Engine
     public class BetManager : IBetManager
     {
         private UInt64 minimumRaise;
-        private UInt64 mostCommitted;//the most amount of money a player has committed so far.
+        private UInt64 mostCommitted; //the most amount of money a player has committed so far.
         private UInt64 smallBlind;
         private UInt64 bigBlind;
         private UInt64 ante;

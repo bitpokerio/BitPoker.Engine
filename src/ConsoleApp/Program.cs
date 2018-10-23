@@ -1,4 +1,5 @@
 ﻿using System;
+using BitPoker.Engine;
 
 namespace ConsoleApp
 {
@@ -6,24 +7,18 @@ namespace ConsoleApp
     {
         public static void Main(string[] args)
         {
-            
             Seat[] players = new Seat[5];
 
             for (int i = 0; i < players.Length; i++)
             {
                 players[i] = new Seat();
-                players[i].Chips = 200.0;
+                players[i].Chips = 200;
                 players[i].Name = "Test " + i;
                 players[i].SeatNumber = i + 1;
             }
 
-            Double[] blinds = new double[] { 1, 2 };
-
-
-
+            UInt64[] blinds = new UInt64[] { 1, 2 };
             HandEngine engine = new HandEngine(players, 0, 0, blinds);
-            //engine.AddAction()
-
 
             while(!engine.HandOver)
             {
@@ -31,12 +26,12 @@ namespace ConsoleApp
                 Console.WriteLine("Please act " + firstToAct);
                 //Console.ReadLine();
 
-                var action = new holdem_engine.Action("test1", holdem_engine.Action.ActionTypes.PostSmallBlind, 1);
+                //var action = new holdem_engine.Action("test1", holdem_engine.Action.ActionTypes.PostSmallBlind, 1);
 
                 //is it valid
                 var valid = engine.GetValidActions();
 
-                engine.AddAction(firstToAct, action);
+                //engine.AddAction(firstToAct, action);
             }
 
 

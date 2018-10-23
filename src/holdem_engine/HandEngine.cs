@@ -12,8 +12,6 @@ namespace holdem_engine
     /// </summary>
     public class HandEngine 
     {
-        #region Member Variables
-
         Seat[] _seats;
 
         BetManager _betManager;
@@ -24,7 +22,6 @@ namespace holdem_engine
         int _utgIdx;
         int _bbIdx;
         CachedHand _cache;
-        #endregion
 
         /// <summary>
         /// MAYBE ROUND OVER
