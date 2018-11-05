@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using BitPoker.Engine;
 
-namespace ConsoleApp
+namespace BitPoker.Engine
 {
     /// <summary>
     /// Plays of a hand of poker between a list of players. Designed for fast local use by AI agents.
@@ -317,7 +317,6 @@ namespace ConsoleApp
         public void GetBets()
         {
             bool roundOver = false;
-            
             int pIdx = GetFirstToAct(this.CurrentRound == Round.Preflop);
             
             //keep getting bets until the round is over
