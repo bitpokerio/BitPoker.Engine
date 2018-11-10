@@ -14,26 +14,20 @@ namespace BitPoker.Engine
     {
         Seat[] _seats;
 
-        BetManager _betManager;
-        PotManager _potManager;
-        CircularList<int> _playerIndices;
+        readonly BetManager _betManager;
+        readonly PotManager _potManager;
+        readonly CircularList<int> _playerIndices;
 
 
-        int _buttonIdx;
-        int _utgIdx;
+        readonly int _buttonIdx;
+        readonly int _utgIdx;
         int _bbIdx;
         
         private string tableName;
 
-        private UInt64[] hc;
-
-
-        private BettingStructure bs;
-
 
         private List<Winner> winners;
-        
-        private UInt64[] startingChips;
+
         private int maxPlayersPerTable;
         private uint dealtCards;
 
@@ -85,11 +79,7 @@ namespace BitPoker.Engine
 
         public IList<Winner> Winners { get; private set; }
 
-        public UInt64[] StartingChips
-        {
-            get { return startingChips; }
-            set { startingChips = value; }
-        }
+        public UInt64[] StartingChips { get; set; }
 
         public int MaxPlayersPerTable { get; set; }
 
@@ -101,17 +91,9 @@ namespace BitPoker.Engine
 
         public UInt64 Pot { get; set; }
 
-        public BettingStructure BettingStructure
-        {
-            get { return bs; }
-            set { bs = value; }
-        }
-	
-        public UInt64[] HoleCards
-        {
-            get { return hc; }
-            set { hc = value; }
-        }
+        public BettingStructure BettingStructure { get; set; }
+
+        public UInt64[] HoleCards { get; set; }
 
         //Betting states
         public UInt64 Ante { get; private set; }
@@ -125,7 +107,6 @@ namespace BitPoker.Engine
         //TODO: Button index
         public uint Button { get; private set ;}
                    
-        
         public bool[] Folded { get; set; }
 
         public bool[] AllIn { get; set; }
@@ -330,7 +311,7 @@ namespace BitPoker.Engine
                 BitPoker.Engine.Action.ActionTypes actionType; 
                 UInt64 amount;
 
-                _seats[pIdx].Brain.GetAction(_history, out actionType, out amount);
+                //_seats[pIdx].Brain.GetAction(this.history, out actionType, out amount);
 
                 AddAction(pIdx, new BitPoker.Engine.Action(_seats[pIdx].Name, actionType, amount));
 
@@ -398,7 +379,7 @@ namespace BitPoker.Engine
         /// </summary>
         public void GetBlinds()
         {
-            if (this.Ante > 0)
+            if (Ante > 0)
             {
                 for (int i = _utgIdx, count = 0; count < _seats.Length; i = (i + 1) % _seats.Length, count++)
                 {
@@ -424,7 +405,7 @@ namespace BitPoker.Engine
             {
                 if (_playerIndices.Contains(_bbIdx))
                 {
-                    AddAction(_bbIdx, new BitPoker.Engine.Action(_seats[_bbIdx].Name, BitPoker.Engine.Action.ActionTypes.PostBigBlind, this.BigBlind);
+                    AddAction(_bbIdx, new BitPoker.Engine.Action(_seats[_bbIdx].Name, BitPoker.Engine.Action.ActionTypes.PostBigBlind, this.BigBlind));
                     //AddAction(_bbIdx, new BitPoker.Engine.Action(_seats[_bbIdx].Name, BitPoker.Engine.Action.ActionTypes.PostBigBlind, this.BigBlind), this.PredealActions);
                 }
             }
@@ -439,7 +420,7 @@ namespace BitPoker.Engine
             {
                 //this.HoleCards[i] = _cache != null ? _cache.HoleCards[i] : Hand.RandomHand(_history.DealtCards, 2);
                 this.HoleCards[i] = Hand.RandomHand(DealtCards, 2);
-                this.DealtCards = this.DealtCards | this..HoleCards[i];
+                this.DealtCards = this.DealtCards | this.HoleCards[i];
             }
         }
 

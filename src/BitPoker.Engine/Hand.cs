@@ -4,7 +4,12 @@ namespace BitPoker.Engine
 {
     public class Hand
     {
-        public UInt64 RandomHand()
+        public static UInt64 RandomHand()
+        {
+            return 0;
+        }
+        
+        public static UInt64 RandomHand(uint hand, uint index)
         {
             return 0;
         }
