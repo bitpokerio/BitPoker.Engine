@@ -24,8 +24,9 @@ namespace ConsoleApp
             {
                 int firstToAct = engine.GetFirstToAct(true);
                 Console.WriteLine("Please act " + firstToAct);
-                //Console.ReadLine();
 
+
+                //Console.ReadLine();
                 //var action = new holdem_engine.Action("test1", holdem_engine.Action.ActionTypes.PostSmallBlind, 1);
 
                 //is it valid

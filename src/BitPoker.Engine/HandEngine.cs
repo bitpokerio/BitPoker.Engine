@@ -93,7 +93,7 @@ namespace BitPoker.Engine
 
         public BettingStructure BettingStructure { get; set; }
 
-        public UInt64[] HoleCards { get; set; }
+        public uint[] HoleCards { get; set; }
 
         //Betting states
         public UInt64 Ante { get; private set; }
@@ -178,11 +178,11 @@ namespace BitPoker.Engine
         {
         }
 
-        public HandEngine(Seat[] players, ulong handNumber, uint button, UInt64[] blinds)
+        public HandEngine(Seat[] players, uint handNumber, uint button, UInt64[] blinds)
         {
             _seats = players;
 
-            this.HoleCards = new ulong[_seats.Length];
+            this.HoleCards = new uint[_seats.Length];
             this.DealtCards = 0;
             this.Flop = 0;
             this.Turn = 0;
@@ -309,11 +309,11 @@ namespace BitPoker.Engine
                 
                 //get the next player's action
                 BitPoker.Engine.Action.ActionTypes actionType; 
-                UInt64 amount;
+                UInt64 amount = 0;
 
                 //_seats[pIdx].Brain.GetAction(this.history, out actionType, out amount);
 
-                AddAction(pIdx, new BitPoker.Engine.Action(_seats[pIdx].Name, actionType, amount));
+                AddAction(pIdx, new BitPoker.Engine.Action(_seats[pIdx].Name, BitPoker.Engine.Action.ActionTypes.None, amount));
 
                 roundOver = _betManager.RoundOver;
 
